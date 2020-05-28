@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
-* Студент: [Анна Макаричак](https://up.htmlacademy.ru/javascript/20/user/470691).
-* Наставник: `Неизвестно`.
+- Студент: [Анна Макаричак](https://up.htmlacademy.ru/javascript/20/user/470691).
+- Наставник: [Дмитрий (sench) Железцов](https://htmlacademy.ru/profile/sench).
 
 ---
 
