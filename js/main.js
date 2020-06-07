@@ -1,13 +1,17 @@
 'use strict';
+
+var types = ['palace', 'flat', 'house', 'bungalo'];
+var checkinTimes = ['12:00', '13:00', '14:00'];
+var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var photos = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+var NUMBER_OF_PINS = 8;
+var PIN_WIDTH = 50;
+var PIN_HEIGHT = 70;
+
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 
-var similarNoticeTemplate = document.querySelector('#card').content.querySelector('.map__card');
-
-// for (var i = 0; i < 8; i++) {
-//   var noticeElement = similarNoticeTemplate.cloneNode(true);
-//   similarNoticeElement.appendChild(noticeElement);
-// }
+// var similarNoticeTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
 var getLocation = function () {
   var x = Math.round(Math.random() * 1200);
@@ -20,15 +24,6 @@ var getLocation = function () {
     y: y
   };
 };
-
-var types = ['palace', 'flat', 'house', 'bungalo'];
-var checkinTimes = ['12:00', '13:00', '14:00'];
-var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-var photos = [
-  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-];
 
 var getRandomElement = function (array) {
   var randomIndex = Math.round(Math.random() * (array.length - 1));
@@ -45,7 +40,7 @@ var getRandomLengthArray = function (array) {
 var getNotices = function () {
   var notices = [];
 
-  for (var index = 1; index <= 8; index++) {
+  for (var index = 1; index <= NUMBER_OF_PINS; index++) {
     var location = getLocation();
     var similarNotice = {
       author: {
@@ -73,45 +68,56 @@ var getNotices = function () {
   return notices;
 };
 
-var renderNotice = function (notice) {
-  var noticeElement = similarNoticeTemplate.cloneNode(true);
-  noticeElement.querySelector('.popup__avatar').src = notice.author.avatar;
-  noticeElement.querySelector('.popup__title').textContent = notice.offer.title;
-  noticeElement.querySelector('.popup__text--address').textContent = notice.offer.address;
-  noticeElement.querySelector('.popup__text--price').textContent = notice.offer.price + '\u20BD' + ' /ночь';
-  noticeElement.querySelector('.popup__type').textContent = notice.offer.type;
-  noticeElement.querySelector('.popup__text--capacity').textContent =
-    notice.offer.rooms + ' комнаты для ' + notice.offer.guests + ' гостей';
-  noticeElement.querySelector('.popup__text--time').textContent =
-    'Заезд после ' + notice.offer.checkin + ', выезд до ' + notice.offer.checkout;
-  // noticeElement.querySelector('.popup__feature').textContent = notice.offer.features; // TODO: ask mentor
-  noticeElement.querySelector('.popup__description').textContent = notice.offer.description;
+// var renderNotice = function (notice) {
+//   var noticeElement = similarNoticeTemplate.cloneNode(true);
+//   noticeElement.querySelector('.popup__avatar').src = notice.author.avatar;
+//   noticeElement.querySelector('.popup__title').textContent = notice.offer.title;
+//   noticeElement.querySelector('.popup__text--address').textContent = notice.offer.address;
+//   noticeElement.querySelector('.popup__text--price').textContent = notice.offer.price + '\u20BD' + ' /ночь';
+//   noticeElement.querySelector('.popup__type').textContent = notice.offer.type;
+//   noticeElement.querySelector('.popup__text--capacity').textContent =
+//     notice.offer.rooms + ' комнаты для ' + notice.offer.guests + ' гостей';
+//   noticeElement.querySelector('.popup__text--time').textContent =
+//     'Заезд после ' + notice.offer.checkin + ', выезд до ' + notice.offer.checkout;
+//   // noticeElement.querySelector('.popup__feature').textContent = notice.offer.features; // TODO: ask mentor
+//   noticeElement.querySelector('.popup__description').textContent = notice.offer.description;
 
-  var photosElement = noticeElement.querySelector('.popup__photos');
+//   var photosElement = noticeElement.querySelector('.popup__photos');
 
-  for (var photoIndex = 0; photoIndex < notice.offer.photos.length; photoIndex++) {
-    var photoTemplate = photosElement.children[0].cloneNode(true);
-    photoTemplate.src = notice.offer.photos[photoIndex];
-    photosElement.appendChild(photoTemplate);
-    photosElement.children[0].remove();
-  }
+//   for (var photoIndex = 0; photoIndex < notice.offer.photos.length; photoIndex++) {
+//     var photoTemplate = photosElement.children[0].cloneNode(true);
+//     photoTemplate.src = notice.offer.photos[photoIndex];
+//     photosElement.appendChild(photoTemplate);
+//     photosElement.children[0].remove();
+//   }
 
-  noticeElement.style = 'left: ' + notice.location.x + 'px; top: ' + notice.location.y + 'px;';
+//   noticeElement.style = 'left: ' + notice.location.x + 'px; top: ' + notice.location.y + 'px;';
 
-  return noticeElement;
+//   return noticeElement;
+// };
+var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+
+var renderPin = function (x, y, avatar, title) {
+  var pinElement = similarPinTemplate.cloneNode(true);
+  var pinX = x - PIN_WIDTH / 2;
+  var pinY = y - PIN_HEIGHT;
+  pinElement.style = 'left: ' + pinX + 'px; top: ' + pinY + 'px;';
+  var pinUserImage = pinElement.querySelector('img');
+  pinUserImage.src = avatar;
+  pinUserImage.alt = title;
+
+  return pinElement;
 };
 
 var allNotices = getNotices();
-console.log(allNotices);
-
-console.log(renderNotice(allNotices[5]));
-
-var similarListElement = document.querySelector('.map__similar-list');
+var mapPinsElement = document.querySelector('.map__pins');
 
 var fragment = document.createDocumentFragment();
-for (var b = 0; b < 8; b++) {
-  // fragment.appendChild(renderNotice(allNotices[b]));
-  // fragment.appendChild(renderPin(allNotices[b]));
+
+for (var noticeIndex = 0; noticeIndex < NUMBER_OF_PINS; noticeIndex++) {
+  // fragment.appendChild(renderNotice(allNotices[noticeIndex]));
+  var currentNotice = allNotices[noticeIndex];
+  fragment.appendChild(renderPin(currentNotice.location.x, currentNotice.location.y, currentNotice.author.avatar, currentNotice.offer.title));
 }
 
-similarListElement.appendChild(fragment);
+mapPinsElement.appendChild(fragment);
