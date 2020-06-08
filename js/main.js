@@ -88,10 +88,13 @@ var renderNotice = function (notice) {
   var featuresList = noticeElement.querySelector('.popup__features');
   featuresList.innerHTML = '';
 
-  for (var featuresIndex = 0; featuresIndex < notice.offer.features.length; featuresIndex++) {
-    var featureElement = renderFeature(notice.offer.features[featuresIndex]);
-    noticeElement.querySelector('.popup__features').appendChild(featureElement);
-    console.log(featureElement);
+  if (features.length === 0) {
+    featuresList.style = 'display: none';
+  } else {
+    for (var featuresIndex = 0; featuresIndex < notice.offer.features.length; featuresIndex++) {
+      var featureElement = renderFeature(notice.offer.features[featuresIndex]);
+      noticeElement.querySelector('.popup__features').appendChild(featureElement);
+    }
   }
 
   noticeElement.querySelector('.popup__description').textContent = notice.offer.description;
