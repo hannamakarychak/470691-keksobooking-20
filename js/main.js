@@ -11,7 +11,7 @@ var PIN_HEIGHT = 70;
 var map = document.querySelector('.map');
 map.classList.remove('map--faded');
 
-// var similarNoticeTemplate = document.querySelector('#card').content.querySelector('.map__card');
+var similarNoticeTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
 var getLocation = function () {
   var x = Math.round(Math.random() * 1200);
@@ -68,33 +68,49 @@ var getNotices = function () {
   return notices;
 };
 
-// var renderNotice = function (notice) {
-//   var noticeElement = similarNoticeTemplate.cloneNode(true);
-//   noticeElement.querySelector('.popup__avatar').src = notice.author.avatar;
-//   noticeElement.querySelector('.popup__title').textContent = notice.offer.title;
-//   noticeElement.querySelector('.popup__text--address').textContent = notice.offer.address;
-//   noticeElement.querySelector('.popup__text--price').textContent = notice.offer.price + '\u20BD' + ' /ночь';
-//   noticeElement.querySelector('.popup__type').textContent = notice.offer.type;
-//   noticeElement.querySelector('.popup__text--capacity').textContent =
-//     notice.offer.rooms + ' комнаты для ' + notice.offer.guests + ' гостей';
-//   noticeElement.querySelector('.popup__text--time').textContent =
-//     'Заезд после ' + notice.offer.checkin + ', выезд до ' + notice.offer.checkout;
-//   // noticeElement.querySelector('.popup__feature').textContent = notice.offer.features; // TODO: ask mentor
-//   noticeElement.querySelector('.popup__description').textContent = notice.offer.description;
+var renderFeature = function (featureName) {
+  var feature = document.createElement('li');
+  feature.classList.add('popup__feature');
+  feature.classList.add('popup__feature--' + featureName);
+  return feature;
+};
 
-//   var photosElement = noticeElement.querySelector('.popup__photos');
+var renderNotice = function (notice) {
+  var noticeElement = similarNoticeTemplate.cloneNode(true);
+  noticeElement.querySelector('.popup__avatar').src = notice.author.avatar;
+  noticeElement.querySelector('.popup__title').textContent = notice.offer.title;
+  noticeElement.querySelector('.popup__text--address').textContent = notice.offer.address;
+  noticeElement.querySelector('.popup__text--price').textContent = notice.offer.price + '\u20BD' + ' /ночь';
+  noticeElement.querySelector('.popup__type').textContent = notice.offer.type;
+  noticeElement.querySelector('.popup__text--capacity').textContent = notice.offer.rooms + ' комнаты для ' + notice.offer.guests + ' гостей';
+  noticeElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + notice.offer.checkin + ', выезд до ' + notice.offer.checkout;
 
-//   for (var photoIndex = 0; photoIndex < notice.offer.photos.length; photoIndex++) {
-//     var photoTemplate = photosElement.children[0].cloneNode(true);
-//     photoTemplate.src = notice.offer.photos[photoIndex];
-//     photosElement.appendChild(photoTemplate);
-//     photosElement.children[0].remove();
-//   }
+  var featuresList = noticeElement.querySelector('.popup__features');
+  featuresList.innerHTML = '';
 
-//   noticeElement.style = 'left: ' + notice.location.x + 'px; top: ' + notice.location.y + 'px;';
+  for (var featuresIndex = 0; featuresIndex < notice.offer.features.length; featuresIndex++) {
+    var featureElement = renderFeature(notice.offer.features[featuresIndex]);
+    noticeElement.querySelector('.popup__features').appendChild(featureElement);
+    console.log(featureElement);
+  }
 
-//   return noticeElement;
-// };
+  noticeElement.querySelector('.popup__description').textContent = notice.offer.description;
+
+  // console.log(getNotices());
+
+  var photosElement = noticeElement.querySelector('.popup__photos');
+
+  for (var photoIndex = 0; photoIndex < notice.offer.photos.length; photoIndex++) {
+    var photoTemplate = photosElement.children[0].cloneNode(true);
+    photoTemplate.src = notice.offer.photos[photoIndex];
+    photosElement.appendChild(photoTemplate);
+    photosElement.children[0].remove();
+  }
+
+  noticeElement.style = 'left: ' + notice.location.x + 'px; top: ' + notice.location.y + 'px;';
+
+  return noticeElement;
+};
 var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
 var renderPin = function (x, y, avatar, title) {
@@ -115,7 +131,7 @@ var mapPinsElement = document.querySelector('.map__pins');
 var fragment = document.createDocumentFragment();
 
 for (var noticeIndex = 0; noticeIndex < NUMBER_OF_PINS; noticeIndex++) {
-  // fragment.appendChild(renderNotice(allNotices[noticeIndex]));
+  fragment.appendChild(renderNotice(allNotices[noticeIndex]));
   var currentNotice = allNotices[noticeIndex];
   fragment.appendChild(renderPin(currentNotice.location.x, currentNotice.location.y, currentNotice.author.avatar, currentNotice.offer.title));
 }
