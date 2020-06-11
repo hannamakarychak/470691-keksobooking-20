@@ -134,9 +134,10 @@ var mapPinsElement = document.querySelector('.map__pins');
 var fragment = document.createDocumentFragment();
 
 for (var noticeIndex = 0; noticeIndex < NUMBER_OF_PINS; noticeIndex++) {
-  fragment.appendChild(renderNotice(allNotices[noticeIndex]));
   var currentNotice = allNotices[noticeIndex];
   fragment.appendChild(renderPin(currentNotice.location.x, currentNotice.location.y, currentNotice.author.avatar, currentNotice.offer.title));
 }
+
+fragment.appendChild(renderNotice(allNotices[0]));
 
 mapPinsElement.appendChild(fragment);
