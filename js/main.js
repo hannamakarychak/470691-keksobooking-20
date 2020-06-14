@@ -62,7 +62,7 @@ var handlePinClick = function (evt) {
 pinMain.addEventListener('mousedown', handlePinClick);
 pinMain.addEventListener('keydown', handlePinClick);
 
-// var similarNoticeTemplate = document.querySelector('#card').content.querySelector('.map__card');
+var similarNoticeTemplate = document.querySelector('#card').content.querySelector('.map__card');
 
 var getLocation = function () {
   var x = Math.round(Math.random() * 1200);
@@ -150,8 +150,6 @@ var renderNotice = function (notice) {
 
   noticeElement.querySelector('.popup__description').textContent = notice.offer.description;
 
-  // console.log(getNotices());
-
   var photosElement = noticeElement.querySelector('.popup__photos');
 
   for (var photoIndex = 0; photoIndex < notice.offer.photos.length; photoIndex++) {
@@ -193,19 +191,6 @@ for (var noticeIndex = 0; noticeIndex < NUMBER_OF_PINS; noticeIndex++) {
 
 mapPinsElement.appendChild(fragment);
 
-var handleSubmit = function (evt) {
-  // evt.preventDefault();
-  // var accomodationObj = {
-  //   bungalo: 0,
-  //   flat: 1000,
-  //   house: 5000,
-  //   palace: 10000
-  // };
-};
-
-var form = document.querySelector('.ad-form');
-form.addEventListener('submit', handleSubmit);
-
 var handleTypeChange = function (evt) {
   var type = evt.target.value;
   var minPrice;
@@ -230,9 +215,11 @@ var accomodationSelect = document.querySelector('#type');
 accomodationSelect.addEventListener('change', handleTypeChange);
 
 var maxNumberOfGuests = 1;
+var capacitySelect = document.querySelector('#capacity');
 
 var handleRoomChange = function (evt) {
   var roomNumber = parseInt(evt.target.value, 10);
+  var currentCapacity = parseInt(capacitySelect.value, 10);
 
   if (roomNumber === 1) {
     maxNumberOfGuests = 1;
@@ -247,19 +234,19 @@ var handleRoomChange = function (evt) {
   if (roomNumber === 100) {
     maxNumberOfGuests = 0;
   }
-};
 
-// capacitySelect.setCustomValidity('Подходит только для 1 гостя');
+  if ((currentCapacity !== 0 && currentCapacity > maxNumberOfGuests) || (currentCapacity === 0 && maxNumberOfGuests !== 0)) {
+    capacitySelect.setCustomValidity('ошибка');
+  } else {
+    capacitySelect.setCustomValidity('');
+  }
+};
 
 var roomSelect = document.querySelector('#room_number');
 roomSelect.addEventListener('change', handleRoomChange);
 
-var capacitySelect = document.querySelector('#capacity');
-
 var handleCapacityChange = function (evt) {
   var currentCapacity = parseInt(evt.target.value, 10);
-  console.log('currentCapacity', currentCapacity);
-  console.log('maxNumberOfGuests', maxNumberOfGuests);
 
   if ((currentCapacity !== 0 && currentCapacity > maxNumberOfGuests) || (currentCapacity === 0 && maxNumberOfGuests !== 0)) {
     capacitySelect.setCustomValidity('ошибка');
@@ -269,3 +256,20 @@ var handleCapacityChange = function (evt) {
 };
 
 capacitySelect.addEventListener('change', handleCapacityChange);
+
+var checkinTime = document.querySelector('#timein');
+var checkoutTime = document.querySelector('#timeout');
+
+var handleCheckinTimeChange = function (evt) {
+  var currentCheckinTime = evt.target.value;
+  checkoutTime.value = currentCheckinTime;
+};
+
+checkinTime.addEventListener('change', handleCheckinTimeChange);
+
+var handleCheckoutTimeChange = function (evt) {
+  var currentCheckoutTime = evt.target.value;
+  checkinTime.value = currentCheckoutTime;
+};
+
+checkoutTime.addEventListener('change', handleCheckoutTimeChange);
