@@ -217,42 +217,41 @@ accomodationSelect.addEventListener('change', handleTypeChange);
 var maxNumberOfGuests = 1;
 var capacitySelect = document.querySelector('#capacity');
 
-var handleRoomChange = function (evt) {
-  var roomNumber = parseInt(evt.target.value, 10);
-  var currentCapacity = parseInt(capacitySelect.value, 10);
-
-  if (roomNumber === 1) {
+var checkRoomForNumberOfGuests = function (numberOfRooms, numberOfGuests) {
+  if (numberOfRooms === 1) {
     maxNumberOfGuests = 1;
   }
-  if (roomNumber === 2) {
+  if (numberOfRooms === 2) {
     maxNumberOfGuests = 2;
   }
-  if (roomNumber === 3) {
+  if (numberOfRooms === 3) {
     maxNumberOfGuests = 3;
   }
 
-  if (roomNumber === 100) {
+  if (numberOfRooms === 100) {
     maxNumberOfGuests = 0;
   }
 
-  if ((currentCapacity !== 0 && currentCapacity > maxNumberOfGuests) || (currentCapacity === 0 && maxNumberOfGuests !== 0)) {
+  if ((numberOfGuests !== 0 && numberOfGuests > maxNumberOfGuests) || (numberOfGuests === 0 && maxNumberOfGuests !== 0)) {
     capacitySelect.setCustomValidity('ошибка');
   } else {
     capacitySelect.setCustomValidity('');
   }
 };
 
+var handleRoomChange = function (evt) {
+  var selectedRoomNumber = parseInt(evt.target.value, 10);
+  var selectedNumberOfGuests = parseInt(capacitySelect.value, 10);
+  checkRoomForNumberOfGuests(selectedRoomNumber, selectedNumberOfGuests);
+};
+
 var roomSelect = document.querySelector('#room_number');
 roomSelect.addEventListener('change', handleRoomChange);
 
 var handleCapacityChange = function (evt) {
-  var currentCapacity = parseInt(evt.target.value, 10);
-
-  if ((currentCapacity !== 0 && currentCapacity > maxNumberOfGuests) || (currentCapacity === 0 && maxNumberOfGuests !== 0)) {
-    capacitySelect.setCustomValidity('ошибка');
-  } else {
-    capacitySelect.setCustomValidity('');
-  }
+  var selectedNumberOfGuests = parseInt(evt.target.value, 10);
+  var selectedRoomNumber = parseInt(roomSelect.value, 10);
+  checkRoomForNumberOfGuests(selectedRoomNumber, selectedNumberOfGuests);
 };
 
 capacitySelect.addEventListener('change', handleCapacityChange);
