@@ -12,6 +12,7 @@ var PIN_DISABLED_WIDTH = 65;
 var PIN_DISABLED_HEIGHT = 65;
 
 var pinMain = document.querySelector('.map__pin--main');
+var mapPinsElement = document.querySelector('.map__pins');
 
 var getPinPosition = function () {
   var pinTop = pinMain.style.top;
@@ -38,16 +39,33 @@ var pinDisabledY = Math.round(initialPinPosition.y + PIN_DISABLED_HEIGHT / 2);
 var formAddress = document.getElementById('address');
 formAddress.value = pinDisabledX + ', ' + pinDisabledY;
 
-var renderPin = function (x, y, avatar, title) {
+var closeNotice = function () {
+  var mapCardElement = document.querySelector('.map__card');
+  if (mapCardElement) {
+    mapCardElement.querySelector('.popup__close').removeEventListener('click', handleNoticeClose);
+    document.removeEventListener('keydown', handleNoticeClose);
+    mapCardElement.remove();
+  }
+};
+
+var renderPin = function (notice) {
   var similarPinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
   var pinElement = similarPinTemplate.cloneNode(true);
-  var pinX = x - PIN_WIDTH / 2;
-  var pinY = y - PIN_HEIGHT;
+  var pinX = notice.location.x - PIN_WIDTH / 2;
+  var pinY = notice.location.y - PIN_HEIGHT;
   pinElement.style = 'left: ' + pinX + 'px; top: ' + pinY + 'px;';
   var pinUserImage = pinElement.querySelector('img');
-  pinUserImage.src = avatar;
-  pinUserImage.alt = title;
+  pinUserImage.src = notice.author.avatar;
+  pinUserImage.alt = notice.offer.title;
+
+  var handleMapPinClick = function () {
+    closeNotice();
+
+    renderNotice(notice);
+  };
+
+  pinElement.addEventListener('click', handleMapPinClick);
 
   return pinElement;
 };
@@ -62,16 +80,14 @@ var handlePinClick = function (evt) {
     form.classList.remove('ad-form--disabled');
 
     var allNotices = getNotices();
-    var mapPinsElement = document.querySelector('.map__pins');
 
     var fragment = document.createDocumentFragment();
 
     for (var noticeIndex = 0; noticeIndex < NUMBER_OF_PINS; noticeIndex++) {
       var currentNotice = allNotices[noticeIndex];
-      fragment.appendChild(renderPin(currentNotice.location.x, currentNotice.location.y, currentNotice.author.avatar, currentNotice.offer.title));
-    }
 
-    fragment.appendChild(renderNotice(allNotices[0]));
+      fragment.appendChild(renderPin(currentNotice));
+    }
 
     mapPinsElement.appendChild(fragment);
 
@@ -85,7 +101,17 @@ var handlePinClick = function (evt) {
 
     var activeFormAddress = document.getElementById('address');
     activeFormAddress.value = currentPinX + ', ' + currentPinY;
+
+    var mainPinClicked = true;
   }
+
+  if (mainPinClicked) {
+    pinMain.removeEventListener('mousedown', handlePinClick);
+    pinMain.removeEventListener('keydown', handlePinClick);
+  }
+
+  var priceElement = document.querySelector('#price');
+  priceElement.value = 1000;
 };
 
 pinMain.addEventListener('mousedown', handlePinClick);
@@ -112,9 +138,9 @@ var getRandomElement = function (array) {
 };
 
 var getRandomLengthArray = function (array) {
-  var randomLenght = Math.round(Math.random() * (array.length - 1));
+  var randomLength = Math.round(Math.random() * (array.length - 1));
 
-  return array.slice(0, randomLenght);
+  return array.slice(0, randomLength);
 };
 
 var getNotices = function () {
@@ -155,6 +181,13 @@ var renderFeature = function (featureName) {
   return feature;
 };
 
+var handleNoticeClose = function (evt) {
+  evt.preventDefault();
+  if (evt.button === 0 || evt.key === 'Escape') {
+    closeNotice();
+  }
+};
+
 var renderNotice = function (notice) {
   var noticeElement = similarNoticeTemplate.cloneNode(true);
   noticeElement.querySelector('.popup__avatar').src = notice.author.avatar;
@@ -190,7 +223,10 @@ var renderNotice = function (notice) {
 
   noticeElement.style = 'left: ' + notice.location.x + 'px; top: ' + notice.location.y + 'px;';
 
-  return noticeElement;
+  mapPinsElement.appendChild(noticeElement);
+
+  noticeElement.querySelector('.popup__close').addEventListener('click', handleNoticeClose);
+  document.addEventListener('keydown', handleNoticeClose);
 };
 
 var handleTypeChange = function (evt) {
@@ -217,6 +253,7 @@ var handleTypeChange = function (evt) {
   var priceElement = document.querySelector('#price');
   priceElement.min = minPrice;
   priceElement.placeholder = minPrice;
+  priceElement.value = minPrice;
 };
 var accomodationSelect = document.querySelector('#type');
 accomodationSelect.addEventListener('change', handleTypeChange);
