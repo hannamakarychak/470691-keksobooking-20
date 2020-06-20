@@ -101,7 +101,17 @@ var handlePinClick = function (evt) {
 
     var activeFormAddress = document.getElementById('address');
     activeFormAddress.value = currentPinX + ', ' + currentPinY;
+
+    var mainPinClicked = true;
   }
+
+  if (mainPinClicked) {
+    pinMain.removeEventListener('mousedown', handlePinClick);
+    pinMain.removeEventListener('keydown', handlePinClick);
+  }
+
+  var priceElement = document.querySelector('#price');
+  priceElement.value = 1000;
 };
 
 pinMain.addEventListener('mousedown', handlePinClick);
@@ -128,9 +138,9 @@ var getRandomElement = function (array) {
 };
 
 var getRandomLengthArray = function (array) {
-  var randomLenght = Math.round(Math.random() * (array.length - 1));
+  var randomLength = Math.round(Math.random() * (array.length - 1));
 
-  return array.slice(0, randomLenght);
+  return array.slice(0, randomLength);
 };
 
 var getNotices = function () {
@@ -243,6 +253,7 @@ var handleTypeChange = function (evt) {
   var priceElement = document.querySelector('#price');
   priceElement.min = minPrice;
   priceElement.placeholder = minPrice;
+  priceElement.value = minPrice;
 };
 var accomodationSelect = document.querySelector('#type');
 accomodationSelect.addEventListener('change', handleTypeChange);
