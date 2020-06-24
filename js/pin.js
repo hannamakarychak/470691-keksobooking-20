@@ -30,6 +30,7 @@
       y: parseInt(pinLeft, 10)
     };
   };
+
   window.pin = {
     renderPin: renderPin,
     getPinPosition: getPinPosition

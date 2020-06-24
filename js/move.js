@@ -50,6 +50,9 @@
       } else {
         window.main.pinMain.style.left = window.main.pinMain.offsetLeft - shift.x + 'px';
       }
+
+      var activeFormAddress = document.getElementById('address');
+      activeFormAddress.value = moveEvt.clientX + ', ' + moveEvt.clientY;
     };
 
     var onMouseUp = function (upEvt) {
