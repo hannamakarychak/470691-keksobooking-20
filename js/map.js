@@ -26,11 +26,11 @@
       }
 
       var currentPinPosition = window.pin.getPinPosition();
-      var currentPinX = Math.round(currentPinPosition.x + window.main.PIN_WIDTH / 2);
-      var currentPinY = Math.round(currentPinPosition.y + window.main.PIN_HEIGHT);
+      // var currentPinX = Math.round(currentPinPosition.x + window.main.PIN_WIDTH / 2);
+      // var currentPinY = Math.round(currentPinPosition.y + window.main.PIN_HEIGHT);
 
-      var activeFormAddress = document.getElementById('address');
-      activeFormAddress.value = currentPinX + ', ' + currentPinY;
+      // var activeFormAddress = document.getElementById('address');
+      // activeFormAddress.value = currentPinX + ', ' + currentPinY;
 
       var mainPinClicked = true;
     }

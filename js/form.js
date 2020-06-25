@@ -91,7 +91,7 @@
     checkoutTime.value = evt.target.value;
   };
 
-  window.main.checkinTime.addEventListener('change', handleCheckinTimeChange);
+  checkinTime.addEventListener('change', handleCheckinTimeChange);
 
   var handleCheckoutTimeChange = function (evt) {
     checkinTime.value = evt.target.value;
@@ -103,6 +103,7 @@
     handleTypeChange: handleTypeChange,
     setDisabledValue: setDisabledValue,
     calculateRoomsAndCapacity: calculateRoomsAndCapacity,
-    roomsInputChangeHandler: roomsInputChangeHandler
+    roomsInputChangeHandler: roomsInputChangeHandler,
+    formAddress: formAddress
   };
 })();
