@@ -57,7 +57,7 @@
   };
 
   var calculateRoomsAndCapacity = function () {
-    var capacityInputSelect = window.main.userForm.querySelector('select[name="capacity"]');
+    var capacityInputSelect = userForm.querySelector('select[name="capacity"]');
     var capacityOptionOptions = capacityInputSelect.querySelectorAll('option');
     var roomsInputValue = roomsInputElement.value;
 

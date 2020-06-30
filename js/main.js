@@ -25,6 +25,18 @@
 
     formFieldset: formFieldset,
 
-    priceElement: priceElement
+    priceElement: priceElement,
+
+    allNotices: []
   };
+
+  var onError = function (message) {
+    console.error(message);
+  };
+
+  var onSuccess = function (data) {
+    window.main.allNotices = data;
+  };
+
+  window.load('https://javascript.pages.academy/keksobooking/data', onSuccess, onError);
 })();
