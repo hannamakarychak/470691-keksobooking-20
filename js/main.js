@@ -27,16 +27,17 @@
 
     priceElement: priceElement,
 
-    allNotices: []
+    allNotices: [],
+
+    onError: onError,
+    onSuccess: onSuccess
   };
 
   var onError = function (message) {
-    console.error(message);
+    alert.error(message);
   };
 
   var onSuccess = function (data) {
     window.main.allNotices = data;
   };
-
-  window.load('https://javascript.pages.academy/keksobooking/data', onSuccess, onError);
 })();

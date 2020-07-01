@@ -1,6 +1,7 @@
 'use strict';
 (function () {
   var handlePinClick = function (evt) {
+    window.backend.load('https://javascript.pages.academy/keksobooking/data', window.main.onSuccess, window.main.onError);
     evt.preventDefault();
 
     if (evt.button === 0 || evt.key === 'Enter') {
