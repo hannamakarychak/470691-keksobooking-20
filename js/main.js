@@ -27,17 +27,6 @@
 
     priceElement: priceElement,
 
-    allNotices: [],
-
-    onError: onError,
-    onSuccess: onSuccess
-  };
-
-  var onError = function (message) {
-    alert.error(message);
-  };
-
-  var onSuccess = function (data) {
-    window.main.allNotices = data;
+    allNotices: []
   };
 })();
