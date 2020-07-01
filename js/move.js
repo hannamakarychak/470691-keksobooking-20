@@ -4,7 +4,7 @@
   var MAIN_PIN_WIDTH = 62;
   var POINTER_HEIGHT = 22;
   var MAP_HEIGHT = 704;
-  var MAP_WIDTH = 1125;
+  var MAP_WIDTH = 1200;
 
   window.main.pinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();

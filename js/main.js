@@ -25,6 +25,8 @@
 
     formFieldset: formFieldset,
 
-    priceElement: priceElement
+    priceElement: priceElement,
+
+    allNotices: []
   };
 })();

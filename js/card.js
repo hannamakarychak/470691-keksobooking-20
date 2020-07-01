@@ -57,8 +57,6 @@
       photosElement.children[0].remove();
     }
 
-    noticeElement.style = 'left: ' + notice.location.x + 'px; top: ' + notice.location.y + 'px;';
-
     window.main.mapPinsElement.appendChild(noticeElement);
 
     noticeElement.querySelector('.popup__close').addEventListener('click', handleNoticeClose);
