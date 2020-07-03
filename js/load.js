@@ -1,10 +1,13 @@
 'use strict';
+var TIMEOUT = 10000;
 
 (function () {
   window.backend = {};
-  window.backend.load = function (url, onSuccess, onError) {
+
+  var getData = function (onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
+    xhr.timeout = TIMEOUT;
 
     xhr.addEventListener('load', function () {
       if (xhr.status === 200) {
@@ -22,9 +25,18 @@
       onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
     });
 
-    xhr.timeout = 1000;
+    return xhr;
+  };
 
-    xhr.open('GET', url);
+  window.backend.load = function (onSuccess, onError) {
+    var xhr = getData(onSuccess, onError);
+    xhr.open('GET', 'https://javascript.pages.academy/keksobooking/data');
     xhr.send();
+  };
+
+  window.backend.save = function (data, onSuccess, onError) {
+    var xhr = getData(onSuccess, onError);
+    xhr.open('POST', 'https://javascript.pages.academy/keksobooking');
+    xhr.send(data);
   };
 })();

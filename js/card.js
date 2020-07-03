@@ -17,7 +17,6 @@
   };
 
   var handleNoticeClose = function (evt) {
-    evt.preventDefault();
     if (evt.button === 0 || evt.key === 'Escape') {
       closeNotice();
     }

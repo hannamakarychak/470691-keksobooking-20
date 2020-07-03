@@ -81,6 +81,21 @@
     }
   };
 
+  var onDataSaveError = function (message) {
+    alert.error(message);
+  };
+
+  var onDataSaveSuccess = function () {
+    window.map.setPageActive(false);
+  };
+
+  userForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(userForm), onDataSaveSuccess, onDataSaveError);
+
+    console.log('submit');
+  });
+
   var roomsInputChangeHandler = function () {
     calculateRoomsAndCapacity();
   };
