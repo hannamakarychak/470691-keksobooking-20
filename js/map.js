@@ -1,8 +1,6 @@
 'use strict';
 (function () {
-  var onDataLoadError = function (message) {
-    alert.error(message);
-  };
+  var onDataLoadError = function () {};
 
   var onDataLoadSuccess = function (data) {
     var fragment = document.createDocumentFragment();
@@ -19,10 +17,25 @@
   var setPageActive = function (isActive) {
     var map = document.querySelector('.map');
     var form = document.querySelector('.ad-form');
+    var submitButton = document.querySelector('.ad-form__submit');
+    var resetButton = document.querySelector('.ad-form__reset');
 
     if (isActive) {
       map.classList.remove('map--faded');
       form.classList.remove('ad-form--disabled');
+
+      var PIN_DISABLED_WIDTH = 65;
+      var PIN_DISABLED_HEIGHT = 65;
+      var initialPinPosition = window.pin.getPinPosition();
+
+      var pinDisabledX = Math.round(initialPinPosition.x + PIN_DISABLED_WIDTH / 2);
+      var pinDisabledY = Math.round(initialPinPosition.y + PIN_DISABLED_HEIGHT / 2);
+
+      submitButton.removeAttribute('disabled');
+      resetButton.removeAttribute('disabled');
+
+      var formAddress = document.getElementById('address');
+      formAddress.value = pinDisabledX + ', ' + pinDisabledY;
     } else {
       map.classList.add('map--faded');
 
@@ -34,6 +47,9 @@
         mapPinList[index].remove();
       }
       window.card.closeNotice();
+
+      submitButton.setAttribute('disabled', true);
+      resetButton.setAttribute('disabled', true);
 
       window.main.pinMain.style.left = window.main.INITIAL_MAIN_PIN_POSITION.x + 'px';
       window.main.pinMain.style.top = window.main.INITIAL_MAIN_PIN_POSITION.y + 'px';

@@ -3,24 +3,10 @@
   var userForm = document.querySelector('.ad-form');
   var roomsInputElement = userForm.querySelector('select[name="rooms"]');
   var accomodationSelect = document.querySelector('#type');
-  var formFilters = document.querySelector('.map__filters');
-  var formAddress = document.getElementById('address');
   var checkinTime = document.querySelector('#timein');
   var checkoutTime = document.querySelector('#timeout');
 
-  for (var fieldsetIndex = 0; fieldsetIndex < window.main.formFieldset.length - 1; fieldsetIndex++) {
-    window.main.formFieldset[fieldsetIndex].setAttribute('disabled', true);
-  }
-  var PIN_DISABLED_WIDTH = 65;
-  var PIN_DISABLED_HEIGHT = 65;
-  formFilters.classList.add('ad-form--disabled');
-
-  var initialPinPosition = window.pin.getPinPosition();
-
-  var pinDisabledX = Math.round(initialPinPosition.x + PIN_DISABLED_WIDTH / 2);
-  var pinDisabledY = Math.round(initialPinPosition.y + PIN_DISABLED_HEIGHT / 2);
-
-  formAddress.value = pinDisabledX + ', ' + pinDisabledY;
+  window.map.setPageActive(false);
 
   var handleTypeChange = function (evt) {
     var PRICE_BUNGALO = 0;
@@ -81,19 +67,63 @@
     }
   };
 
-  var onDataSaveError = function (message) {
-    alert.error(message);
+  var handleErrorPopup = function (evt) {
+    var errorPopup = document.querySelector('.error');
+
+    if (evt.button === 0 || evt.key === 'Escape') {
+      errorPopup.remove();
+
+      window.removeEventListener('keydown', handleErrorPopup);
+      window.removeEventListener('mousedown', handleErrorPopup);
+    }
+  };
+
+  var handleSuccessPopup = function (evt) {
+    var successPopup = document.querySelector('.success');
+
+    if (evt.button === 0 || evt.key === 'Escape') {
+      successPopup.remove();
+
+      window.removeEventListener('keydown', handleSuccessPopup);
+      window.removeEventListener('mousedown', handleSuccessPopup);
+    }
+  };
+
+  var onDataSaveError = function () {
+    var fragment = document.createDocumentFragment();
+    var errorPopupTemplate = document.querySelector('#error').content.querySelector('.error');
+    var errorPopupElement = errorPopupTemplate.cloneNode(true);
+    var mainPageElement = document.querySelector('main');
+    fragment.appendChild(errorPopupElement);
+    mainPageElement.appendChild(fragment);
+
+    var errorPopup = document.querySelector('.error');
+
+    if (errorPopup) {
+      window.addEventListener('keydown', handleErrorPopup);
+      window.addEventListener('mousedown', handleErrorPopup);
+    }
   };
 
   var onDataSaveSuccess = function () {
+    var fragment = document.createDocumentFragment();
+    var successPopupTemplate = document.querySelector('#success').content.querySelector('.success');
+    var successPopupElement = successPopupTemplate.cloneNode(true);
+    var mainPageElement = document.querySelector('main');
+    fragment.appendChild(successPopupElement);
+    mainPageElement.appendChild(fragment);
     window.map.setPageActive(false);
+    var successPopup = document.querySelector('.success');
+
+    if (successPopup) {
+      window.addEventListener('keydown', handleSuccessPopup);
+      window.addEventListener('mousedown', handleSuccessPopup);
+    }
   };
 
   userForm.addEventListener('submit', function (evt) {
     evt.preventDefault();
     window.backend.save(new FormData(userForm), onDataSaveSuccess, onDataSaveError);
-
-    console.log('submit');
   });
 
   var roomsInputChangeHandler = function () {
@@ -118,7 +148,6 @@
     handleTypeChange: handleTypeChange,
     setDisabledValue: setDisabledValue,
     calculateRoomsAndCapacity: calculateRoomsAndCapacity,
-    roomsInputChangeHandler: roomsInputChangeHandler,
-    formAddress: formAddress
+    roomsInputChangeHandler: roomsInputChangeHandler
   };
 })();
