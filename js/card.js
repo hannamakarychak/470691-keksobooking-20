@@ -17,8 +17,7 @@
   };
 
   var handleNoticeClose = function (evt) {
-    evt.preventDefault();
-    if (evt.button === 0 || evt.key === 'Escape') {
+    if (evt.button === window.util.LEFT_MOUSE_BUTTON_CODE || evt.key === window.util.ESCAPE_BUTTON_CODE) {
       closeNotice();
     }
   };

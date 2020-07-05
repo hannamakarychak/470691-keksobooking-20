@@ -3,45 +3,21 @@
   var userForm = document.querySelector('.ad-form');
   var roomsInputElement = userForm.querySelector('select[name="rooms"]');
   var accomodationSelect = document.querySelector('#type');
-  var formFilters = document.querySelector('.map__filters');
-  var formAddress = document.getElementById('address');
   var checkinTime = document.querySelector('#timein');
   var checkoutTime = document.querySelector('#timeout');
 
-  for (var fieldsetIndex = 0; fieldsetIndex < window.main.formFieldset.length - 1; fieldsetIndex++) {
-    window.main.formFieldset[fieldsetIndex].setAttribute('disabled', true);
-  }
-  var PIN_DISABLED_WIDTH = 65;
-  var PIN_DISABLED_HEIGHT = 65;
-  formFilters.classList.add('ad-form--disabled');
-
-  var initialPinPosition = window.pin.getPinPosition();
-
-  var pinDisabledX = Math.round(initialPinPosition.x + PIN_DISABLED_WIDTH / 2);
-  var pinDisabledY = Math.round(initialPinPosition.y + PIN_DISABLED_HEIGHT / 2);
-
-  formAddress.value = pinDisabledX + ', ' + pinDisabledY;
+  window.map.setPageActive(false);
 
   var handleTypeChange = function (evt) {
-    var PRICE_BUNGALO = 0;
-    var PRICE_FLAT = 1000;
-    var PRICE_HOUSE = 5000;
-    var PRICE_PALACE = 10000;
+    var accomodationPrice = {
+      bungalo: 0,
+      flat: 1000,
+      house: 5000,
+      palace: 10000
+    };
 
     var type = evt.target.value;
-    var minPrice;
-    if (type === 'bungalo') {
-      minPrice = PRICE_BUNGALO;
-    }
-    if (type === 'flat') {
-      minPrice = PRICE_FLAT;
-    }
-    if (type === 'house') {
-      minPrice = PRICE_HOUSE;
-    }
-    if (type === 'palace') {
-      minPrice = PRICE_PALACE;
-    }
+    var minPrice = accomodationPrice[type];
 
     window.main.priceElement.min = minPrice;
     window.main.priceElement.placeholder = minPrice;
@@ -81,6 +57,11 @@
     }
   };
 
+  userForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(userForm), window.popup.handleSuccessPopupOpen, window.popup.handleErrorPopupOpen);
+  });
+
   var roomsInputChangeHandler = function () {
     calculateRoomsAndCapacity();
   };
@@ -103,7 +84,6 @@
     handleTypeChange: handleTypeChange,
     setDisabledValue: setDisabledValue,
     calculateRoomsAndCapacity: calculateRoomsAndCapacity,
-    roomsInputChangeHandler: roomsInputChangeHandler,
-    formAddress: formAddress
+    roomsInputChangeHandler: roomsInputChangeHandler
   };
 })();
