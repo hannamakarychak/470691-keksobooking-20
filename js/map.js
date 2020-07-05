@@ -69,7 +69,7 @@
   var handlePinClick = function (evt) {
     evt.preventDefault();
 
-    if (evt.button === 0 || evt.key === 'Enter') {
+    if (evt.button === window.util.LEFT_MOUSE_BUTTON_CODE || evt.key === window.util.ENTER_BUTTON_CODE) {
       window.backend.load(onDataLoadSuccess, onDataLoadError);
 
       setPageActive(true);

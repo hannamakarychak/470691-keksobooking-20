@@ -1,0 +1,12 @@
+'use strict';
+(function () {
+  var ESCAPE_BUTTON_CODE = 'Escape';
+  var ENTER_BUTTON_CODE = 'Enter';
+  var LEFT_MOUSE_BUTTON_CODE = 0;
+
+  window.util = {
+    ESCAPE_BUTTON_CODE: ESCAPE_BUTTON_CODE,
+    LEFT_MOUSE_BUTTON_CODE: LEFT_MOUSE_BUTTON_CODE,
+    ENTER_BUTTON_CODE: ENTER_BUTTON_CODE
+  };
+})();
