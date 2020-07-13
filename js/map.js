@@ -1,17 +1,34 @@
 'use strict';
 (function () {
-  var onDataLoadError = function () {};
-
-  var onDataLoadSuccess = function (data) {
+  var renderPins = function (data) {
     var fragment = document.createDocumentFragment();
 
-    for (var noticeIndex = 0; noticeIndex < window.main.NUMBER_OF_PINS; noticeIndex++) {
+    for (var noticeIndex = 0; noticeIndex < data.length; noticeIndex++) {
+      if (noticeIndex > window.main.MAX_NUMBER_OF_PINS - 1) {
+        break;
+      }
+
       var currentNotice = data[noticeIndex];
 
       fragment.appendChild(window.pin.renderPin(currentNotice));
     }
 
     window.main.mapPinsElement.appendChild(fragment);
+  };
+
+  var removePins = function () {
+    var mapPinList = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var index = 0; index < mapPinList.length; index++) {
+      mapPinList[index].remove();
+    }
+  };
+
+  var onDataLoadError = function () {};
+
+  var onDataLoadSuccess = function (data) {
+    window.main.allNotices = data;
+
+    renderPins(data);
   };
 
   var setPageActive = function (isActive) {
@@ -41,11 +58,7 @@
 
       form.classList.add('ad-form--disabled');
       form.reset();
-
-      var mapPinList = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-      for (var index = 0; index < mapPinList.length; index++) {
-        mapPinList[index].remove();
-      }
+      removePins();
       window.card.closeNotice();
 
       submitButton.setAttribute('disabled', true);
@@ -86,6 +99,8 @@
   window.main.pinMain.addEventListener('keydown', handlePinClick);
 
   window.map = {
-    setPageActive: setPageActive
+    setPageActive: setPageActive,
+    renderPins: renderPins,
+    removePins: removePins
   };
 })();

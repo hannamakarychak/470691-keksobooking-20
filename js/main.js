@@ -3,7 +3,7 @@
 (function () {
   var features = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
 
-  var NUMBER_OF_PINS = 8;
+  var MAX_NUMBER_OF_PINS = 5;
   var PIN_WIDTH = 50;
   var PIN_HEIGHT = 70;
 
@@ -21,7 +21,7 @@
 
   window.main = {
     features: features,
-    NUMBER_OF_PINS: NUMBER_OF_PINS,
+    MAX_NUMBER_OF_PINS: MAX_NUMBER_OF_PINS,
     PIN_WIDTH: PIN_WIDTH,
     PIN_HEIGHT: PIN_HEIGHT,
     INITIAL_MAIN_PIN_POSITION: INITIAL_MAIN_PIN_POSITION,
