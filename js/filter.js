@@ -18,10 +18,7 @@
       return true;
     }
 
-    if (priceCategory === 'high' && price >= PRICE_HIGH) {
-      return true;
-    }
-    return false;
+    return priceCategory === 'high' && price >= PRICE_HIGH;
   };
 
   var checkFeatures = function (noticeFeatures, filtersFeatures) {
