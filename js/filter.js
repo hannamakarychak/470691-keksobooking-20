@@ -49,14 +49,21 @@
       var isPriceMatch = filters.price === ANY_FILTER_VALUE || checkPrice(notice.offer.price, filters.price);
       var isRoomMatch = filters.rooms === ANY_FILTER_VALUE || notice.offer.rooms === parseInt(filters.rooms, 10);
       var isGuestsMatch = filters.guests === ANY_FILTER_VALUE || notice.offer.guests === parseInt(filters.guests, 10);
+      var isOfferPresent = function () {
+        if (notice.offer) {
+          return true;
+        }
+        return false;
+      };
 
-      if (isTypeMatch && isPriceMatch && isRoomMatch && isGuestsMatch && checkFeatures(notice.offer.features, filters.features)) {
+      if (isTypeMatch && isPriceMatch && isRoomMatch && isGuestsMatch && checkFeatures(notice.offer.features, filters.features) && isOfferPresent()) {
         return true;
       }
 
       return false;
     });
 
+    window.card.closeNotice();
     window.map.removePins();
     window.map.renderPins(filteredData);
   });

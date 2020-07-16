@@ -8,6 +8,13 @@
 
   window.map.setPageActive(false);
 
+  var handleResetClick = function () {
+    window.map.setPageActive(false);
+  };
+
+  var resetButton = document.querySelector('.ad-form__reset');
+  resetButton.addEventListener('click', handleResetClick);
+
   var handleTypeChange = function (evt) {
     var accomodationPrice = {
       bungalo: 0,
