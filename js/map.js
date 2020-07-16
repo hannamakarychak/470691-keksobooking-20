@@ -31,7 +31,7 @@
 
   var onDataLoadSuccess = function (data) {
     window.main.allNotices = data;
-
+    setPageActive(true);
     renderPins(data);
   };
 
@@ -110,8 +110,6 @@
 
     if (evt.button === window.util.LEFT_MOUSE_BUTTON_CODE || evt.key === window.util.ENTER_BUTTON_CODE) {
       window.backend.load(onDataLoadSuccess, onDataLoadError);
-
-      setPageActive(true);
 
       window.main.pinMain.removeEventListener('mousedown', handlePinClick);
       window.main.pinMain.removeEventListener('keydown', handlePinClick);
