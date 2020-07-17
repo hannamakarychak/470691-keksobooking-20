@@ -25,18 +25,54 @@
   var renderNotice = function (notice) {
     var similarNoticeTemplate = document.querySelector('#card').content.querySelector('.map__card');
     var noticeElement = similarNoticeTemplate.cloneNode(true);
-    noticeElement.querySelector('.popup__avatar').src = notice.author.avatar;
-    noticeElement.querySelector('.popup__title').textContent = notice.offer.title;
-    noticeElement.querySelector('.popup__text--address').textContent = notice.offer.address;
-    noticeElement.querySelector('.popup__text--price').textContent = notice.offer.price + '\u20BD' + ' /ночь';
-    noticeElement.querySelector('.popup__type').textContent = notice.offer.type;
-    noticeElement.querySelector('.popup__text--capacity').textContent = notice.offer.rooms + ' комнаты для ' + notice.offer.guests + ' гостей';
+
+    var popupAvatar = noticeElement.querySelector('.popup__avatar');
+    if (notice.author.avatar === '') {
+      popupAvatar.style = 'display: none';
+    } else {
+      popupAvatar.src = notice.author.avatar;
+    }
+
+    var popupTitle = noticeElement.querySelector('.popup__title');
+    if (notice.offer.title === '') {
+      popupTitle.style = 'display: none';
+    } else {
+      popupTitle.textContent = notice.offer.title;
+    }
+
+    var popupTextAddress = noticeElement.querySelector('.popup__text--address');
+    if (notice.offer.address === '') {
+      popupTextAddress.style = 'display: none';
+    } else {
+      popupTextAddress.textContent = notice.offer.address;
+    }
+
+    var popupTextPrice = noticeElement.querySelector('.popup__text--price');
+    if (notice.offer.price === null) {
+      popupTextPrice.style = 'display: none';
+    } else {
+      popupTextPrice.textContent = notice.offer.price + '\u20BD' + ' /ночь';
+    }
+
+    var popupType = noticeElement.querySelector('.popup__type');
+    if (notice.offer.type === '') {
+      popupType.style = 'display: none';
+    } else {
+      popupType.textContent = notice.offer.type;
+    }
+
+    var popupTextCapacity = noticeElement.querySelector('.popup__text--capacity');
+    if (notice.offer.rooms === null || notice.offer.rooms === undefined || notice.offer.guests === null || notice.offer.guests === undefined) {
+      popupTextCapacity.style = 'display: none';
+    } else {
+      popupTextCapacity.textContent = notice.offer.rooms + ' комнаты для ' + notice.offer.guests + ' гостей';
+    }
     noticeElement.querySelector('.popup__text--time').textContent = 'Заезд после ' + notice.offer.checkin + ', выезд до ' + notice.offer.checkout;
 
     var featuresList = noticeElement.querySelector('.popup__features');
     featuresList.innerHTML = '';
 
-    if (window.main.features.length === 0) {
+    if (notice.offer.features.length === 0) {
       featuresList.style = 'display: none';
     } else {
       for (var featuresIndex = 0; featuresIndex < notice.offer.features.length; featuresIndex++) {
@@ -45,15 +81,24 @@
       }
     }
 
-    noticeElement.querySelector('.popup__description').textContent = notice.offer.description;
+    var popupDescription = noticeElement.querySelector('.popup__description');
+    if (notice.offer.description === '') {
+      popupDescription.style = 'display: none';
+    } else {
+      popupDescription.textContent = notice.offer.description;
+    }
 
     var photosElement = noticeElement.querySelector('.popup__photos');
 
-    for (var photoIndex = 0; photoIndex < notice.offer.photos.length; photoIndex++) {
-      var photoTemplate = photosElement.children[0].cloneNode(true);
-      photoTemplate.src = notice.offer.photos[photoIndex];
-      photosElement.appendChild(photoTemplate);
-      photosElement.children[0].remove();
+    if (notice.offer.photos.length === 0) {
+      photosElement.style = 'display: none';
+    } else {
+      for (var photoIndex = 0; photoIndex < notice.offer.photos.length; photoIndex++) {
+        var photoTemplate = photosElement.children[0].cloneNode(true);
+        photoTemplate.src = notice.offer.photos[photoIndex];
+        photosElement.appendChild(photoTemplate);
+        photosElement.children[0].remove();
+      }
     }
 
     window.main.mapPinsElement.appendChild(noticeElement);

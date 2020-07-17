@@ -1,5 +1,9 @@
 'use strict';
 (function () {
+  var PIN_DISABLED_WIDTH = 65;
+  var PIN_DISABLED_HEIGHT = 65;
+  var formAddress = document.getElementById('address');
+
   var renderPins = function (data) {
     var fragment = document.createDocumentFragment();
 
@@ -27,7 +31,7 @@
 
   var onDataLoadSuccess = function (data) {
     window.main.allNotices = data;
-
+    setPageActive(true);
     renderPins(data);
   };
 
@@ -41,8 +45,6 @@
       map.classList.remove('map--faded');
       form.classList.remove('ad-form--disabled');
 
-      var PIN_DISABLED_WIDTH = 65;
-      var PIN_DISABLED_HEIGHT = 65;
       var initialPinPosition = window.pin.getPinPosition();
 
       var pinDisabledX = Math.round(initialPinPosition.x + PIN_DISABLED_WIDTH / 2);
@@ -51,7 +53,6 @@
       submitButton.removeAttribute('disabled');
       resetButton.removeAttribute('disabled');
 
-      var formAddress = document.getElementById('address');
       formAddress.value = pinDisabledX + ', ' + pinDisabledY;
     } else {
       map.classList.add('map--faded');
@@ -68,6 +69,31 @@
       window.main.pinMain.style.top = window.main.INITIAL_MAIN_PIN_POSITION.y + 'px';
       window.main.pinMain.addEventListener('mousedown', handlePinClick);
       window.main.pinMain.addEventListener('keydown', handlePinClick);
+
+      initialPinPosition = window.pin.getPinPosition();
+
+      pinDisabledX = Math.round(initialPinPosition.x + PIN_DISABLED_WIDTH / 2);
+      pinDisabledY = Math.round(initialPinPosition.y + PIN_DISABLED_HEIGHT / 2);
+
+      formAddress.value = pinDisabledX + ', ' + pinDisabledY;
+    }
+
+    var filters = document.querySelectorAll('.map__filter');
+    for (var filtersIndex = 0; filtersIndex < filters.length; filtersIndex++) {
+      if (isActive) {
+        filters[filtersIndex].removeAttribute('disabled');
+      } else {
+        filters[filtersIndex].setAttribute('disabled', true);
+      }
+    }
+
+    var filterFeatures = document.querySelectorAll('.map__checkbox');
+    for (var filterFeaturesIndex = 0; filterFeaturesIndex < filterFeatures.length; filterFeaturesIndex++) {
+      if (isActive) {
+        filterFeatures[filterFeaturesIndex].removeAttribute('disabled');
+      } else {
+        filterFeatures[filterFeaturesIndex].setAttribute('disabled', true);
+      }
     }
 
     for (var fieldsetInd = 0; fieldsetInd < window.main.formFieldset.length - 1; fieldsetInd++) {
@@ -84,8 +110,6 @@
 
     if (evt.button === window.util.LEFT_MOUSE_BUTTON_CODE || evt.key === window.util.ENTER_BUTTON_CODE) {
       window.backend.load(onDataLoadSuccess, onDataLoadError);
-
-      setPageActive(true);
 
       window.main.pinMain.removeEventListener('mousedown', handlePinClick);
       window.main.pinMain.removeEventListener('keydown', handlePinClick);
